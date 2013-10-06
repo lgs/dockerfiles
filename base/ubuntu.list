@@ -1,0 +1,4 @@
+deb http://archive.ubuntu.com/ubuntu precise universe
+deb http://archive.ubuntu.com/ubuntu precise-updates universe
+deb http://archive.ubuntu.com/ubuntu precise multiverse
+deb http://archive.ubuntu.com/ubuntu precise-updates multiverse
