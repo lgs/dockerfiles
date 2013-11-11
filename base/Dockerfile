@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # set up package sources
 ADD ubuntu.list /etc/apt/sources.list
-RUN apt-get update ; apt-get upgrade -y
+RUN apt-get update
 
 # set up ssh and CA keys:
 ADD authorized_keys /root/.ssh/authorized_keys
@@ -22,9 +22,13 @@ RUN chown root:root /root/.ssh /root/.ssh/* ; \
 RUN dpkg-divert --local --rename --add /sbin/initctl ;\
     ln -s /bin/true /sbin/initctl
 
-# set up /dev/xconsole
+# have to update after fixing initctl
+RUN apt-get update ; apt-get upgrade -y
+
+# set up /dev/xconsole for rsyslog to work right
 RUN ln -s /dev/tty /dev/xconsole
 
+# install packages
 RUN apt-get install -y --force-yes \
     git mercurial make wget vim screen \
     software-properties-common \
@@ -37,6 +41,7 @@ RUN apt-get install -y --force-yes \
     rsync \
     psmisc man-db traceroute telnet
 
+# basic python install, everything else in virtualenvs
 RUN pip install boto ;\
     pip install virtualenv
 
@@ -50,18 +55,22 @@ RUN cd /usr/lib && \
         /etc/profile.d/go.sh  ;\
     chmod +x /etc/profile.d/go.sh
 
-RUN c_rehash ;\
-    mkdir /var/run/sshd
+# now that openssl is installed we can hash the CA cert
+RUN c_rehash
+
+# sshd requires its runtime dir to start
+RUN mkdir /var/run/sshd
+ADD sshd.run /etc/service/sshd/run
+RUN chmod u+rx /etc/service/sshd/run
 
 # setup rsyslog
 ADD 60-agg.conf /etc/rsyslog.d/
 RUN rm /etc/rsyslog.d/50-default.conf ; \
     chown syslog:adm /var/spool/rsyslog
-
-ADD sshd.run /etc/service/sshd/run
 ADD rsyslogd.run /etc/service/rsyslogd/run
-RUN chmod u+rx /etc/service/*/run
+RUN chmod u+rx /etc/service/rsyslogd/run
 
+# ssh port
 EXPOSE 22
 
 CMD ["/usr/bin/svscanboot"]

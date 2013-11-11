@@ -1,4 +1,5 @@
 FROM eeqj/base:20131111
+ENV DEBIAN_FRONTEND noninteractive
 
 ADD http://www.rabbitmq.com/rabbitmq-signing-key-public.asc /tmp/key.asc
 RUN apt-key add /tmp/key.asc
@@ -10,4 +11,7 @@ RUN /usr/sbin/rabbitmq-plugins enable rabbitmq_management
 
 EXPOSE 5672 15672
 
-ENTRYPOINT ["/usr/sbin/rabbitmq-server"]
+ADD rabbitmq.run /etc/service/rabbitmq/run
+RUN chmod u+rx /etc/service/rabbitmq/run
+
+CMD ["/usr/bin/svscanboot"]
