@@ -1,0 +1,2 @@
+POSTFIXHOST (%{HOST:remotehostname}\[%{IP:remoteip}\])
+POSTFIXQID (?:<postfix_queue_id>[0-9A-F]{11}|NOQUEUE):
