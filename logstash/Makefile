@@ -1,3 +1,3 @@
 build:
-	tar -c . | ssh docker.eeqj.de \
+	tar -c . | ssh $(DOCKERHOST) \
 		'cd `mktemp -d` ; tar xvf - ; docker build -rm -t sneak/logstash .'

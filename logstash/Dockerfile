@@ -1,5 +1,5 @@
 # sneak/logstash
-FROM ubuntu
+FROM sneak/base
 MAINTAINER Jeffrey Paul <sneak@datavibe.net>
 ADD https://download.elasticsearch.org/logstash/logstash/logstash-1.2.2-flatjar.jar /opt/logstash/
 ADD patterns /etc/logstash/patterns

@@ -1,4 +1,4 @@
-FROM sneak/nsq
+FROM eeqj/nsq
 MAINTAINER Jeffrey Paul <sneak@datavibe.net>
 ENTRYPOINT ["/usr/local/bin/nsqlookupd"]
 EXPOSE 4160
