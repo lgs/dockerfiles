@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # set up package sources
 ADD ubuntu.list /etc/apt/sources.list
-RUN apt-get update
+RUN apt-get update ; apt-get upgrade -y
 
 # set up ssh and CA keys:
 ADD authorized_keys /root/.ssh/authorized_keys
